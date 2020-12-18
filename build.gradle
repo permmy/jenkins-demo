@@ -30,7 +30,7 @@ if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
 }
 def out = new ByteArrayOutputStream()
 process.waitForProcessOutput(out, System.err)
-String dockerSockGroupId = "root"
+String dockerSockGroupId = out.toString().trim()
 
 dockerRun {
     name "${project.name}"
@@ -38,7 +38,7 @@ dockerRun {
     ports '8080:8080'
     clean true
     daemonize false
-    arguments '-v', '//var/run/docker.sock:/var/run/docker.sock', '--group-add', dockerSockGroupId
+    arguments '-v', '/var/run/docker.sock:/var/run/docker.sock', '--group-add', dockerSockGroupId
 }
 
 tasks.withType(JavaCompile) {
